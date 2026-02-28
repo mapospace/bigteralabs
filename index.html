@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"  <meta name="viewport"="width=device-width, initial-scale=1.0" />
+  <title>Bigtera Labs — Building Something Special</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #c8a04a;
+      --black: #0a0a0a;
+      --white: #f7f6f3;
+      --gray-100: #e8e6e1;
+      --gray-200: #d0cdc6;
+      --gray-400: #8a8780;
+      --gray-600: #5a5852;
+      --gray-800: #2a2928;
+      --gray-900: #151514;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    ::selection { background: var(--accent); color: var(--black); }
+
+    .label {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.35rem;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .ui {
+      font-family: "Bebas Neue", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.22rem;
+      font-size: 0.75rem;
+      color: var(--white);
+    }
+    .muted { color: var(--gray-400); }
+    .muted2 { color: var(--gray-600); }
+
+    .section {
+      padding: 7rem 4rem;
+      border-top: 1px solid var(--gray-800);
+    }
+    .section.alt { background: var(--gray-900); }
+    .section.tight { padding: 6rem 4rem; }
+    @media (max-width: 900px) {
+      .section { padding: 6rem 2rem; }
+      .section.tight { padding: 5.5rem 2rem; }
+    }
+
+    /* Preloader */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .preloader.hidden { opacity: 0; visibility: hidden; }
+    .preloader .brand {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 3.5rem;
+      letter-spacing: 1.5rem;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 1.2rem;
+      color: var(--white);
+      padding-left: 1.5rem;
+    }
+    .preloader .dot {
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 999px;
+      display: inline-block;
+      animation: pulse 1.2s ease-in-out infinite;
+      transform-origin: center;
+      filter: saturate(1.05);
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.35; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+    }
+
+    /* Nav */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 2rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      mix-blend-mode: difference;
+      pointer-events: none;
+    }
+    .nav * { pointer-events: auto; }
+    .logo {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.7rem;
+      text-transform: uppercase;
+      color: var(--white);
+      white-space: nowrap;
+    }
+    .navlinks {
+      display: flex;
+      gap: 2.2rem;
+      align-items: center;
+    }
+    .navlinks a {
+      position: relative;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2rem;
+      text-transform: uppercase;
+      color: var(--white);
+      padding: 0.4rem 0;
+      opacity: 0.95;
+      transition: opacity 0.3s ease;
+    }
+    .navlinks a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -6px;
+      height: 1px;
+      width: 0%;
+      background: var(--accent);
+      transition: width 0.4s var(--ease);
+    }
+    .navlinks a:hover { opacity: 1; }
+    .navlinks a:hover::after { width: 100%; }
+    .hamburger {
+      display: none;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.2rem;
+      color: var(--white);
+      background: transparent;
+      border: 0;
+      padding: 0.5rem 0.6rem;
+      cursor: pointer;
+    }
+    @media (max-width: 900px) {
+      .nav { padding: 1.4rem 2rem; }
+      .navlinks { display: none; }
+      .hamburger { display: inline-flex; align-items: center; justify-content: center; }
+      .logo { letter-spacing: 0.55rem; }
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      height: 760px;
+      width: 100%;
+      overflow: hidden;
+      border-bottom: 1px solid var(--gray-800);
+      background: #000;
+    }
+    @media (max-width: 900px) {
+      .hero { height: 720px; }
+    }
+    @media (max-width: 520px) {
+      .hero { height: 690px; }
+    }
+
+    .hero-media {
+      position: absolute;
+      inset: 0;
+    }
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(0%);
+      transform: scale(1.02);
+    }
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+    }
+    .hero-content {
+      position: absolute;
+      left: 4rem;
+      bottom: 4rem;
+      right: 4rem;
+      pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      .hero-content { left: 2rem; right: 2rem; bottom: 2.6rem; }
+    }
+
+    .hero-issue {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.35rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0;
+      transform: translateY(25px);
+      animation: up 0.9s var(--ease) forwards;
+      animation-delay: 0.8s;
+    }
+    .hero-title {
+      margin: 0.7rem 0 1.2rem 0;
+      font-family: "Bebas Neue", sans-serif;
+      font-weight: 400;
+      font-size: clamp(5rem, 14vw, 13rem);
+      letter-spacing: 0.6rem;
+      line-height: 0.9;
+      text-transform: uppercase;
+      color: var(--white);
+      opacity: 0;
+      transform: translateY(25px);
+      animation: up 0.9s var(--ease) forwards;
+      animation-delay: 1.0s;
+    }
+    .hero-title .sig { color: var(--accent); }
+    .hero-tagline {
+      margin: 0;
+      font-family: "Libre Baskerville", serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      letter-spacing: 0.05rem;
+      color: var(--gray-400);
+      max-width: 56ch;
+      opacity: 0;
+      transform: translateY(25px);
+      animation: up 0.9s var(--ease) forwards;
+      animation-delay: 1.2s;
+    }
+    .hero-cta-row {
+      margin-top: 2.2rem;
+      display: inline-flex;
+      gap: 1rem;
+      align-items: center;
+      pointer-events: auto;
+      opacity: 0;
+      transform: translateY(25px);
+      animation: up 0.9s var(--ease) forwards;
+      animation-delay: 1.4s;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      height: 46px;
+      padding: 0 1.2rem;
+      border: 1px solid var(--gray-800);
+      background: transparent;
+      color: var(--white);
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.5s var(--ease);
+      text-transform: uppercase;
+      font-family: "Bebas Neue", sans-serif;
+      letter-spacing: 0.22rem;
+      font-size: 0.78rem;
+    }
+    .btn:hover { border-color: rgba(200,160,74,0.55); }
+    .btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--black);
+    }
+    .btn.primary:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+    .btn .arrow { transform: translateX(0); transition: transform 0.5s var(--ease); }
+    .btn:hover .arrow { transform: translateX(4px); }
+
+    .hint {
+      position: absolute;
+      right: 4rem;
+      top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+      transform-origin: right center;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35rem;
+      text-transform: uppercase;
+      color: var(--gray-400);
+      opacity: 0.9;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      .hint { right: 2rem; }
+    }
+    .hero.hovering .hint { opacity: 0; }
+
+    .scroll-indicator {
+      position: absolute;
+      right: 4rem;
+      bottom: 3.2rem;
+      display: grid;
+      gap: 0.9rem;
+      justify-items: center;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(25px);
+      animation: up 0.9s var(--ease) forwards;
+      animation-delay: 1.6s;
+    }
+    @media (max-width: 900px) { .scroll-indicator { right: 2rem; bottom: 2.4rem; } }
+    .scroll-indicator .t {
+      writing-mode: vertical-rl;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.35rem;
+      text-transform: uppercase;
+      color: var(--gray-600);
+    }
+    .scroll-indicator .line {
+      width: 1px;
+      height: 54px;
+      background: linear-gradient(to bottom, rgba(200,160,74,0.0), rgba(200,160,74,0.55), rgba(200,160,74,0.0));
+      animation: breathe 1.8s ease-in-out infinite;
+      opacity: 0.8;
+    }
+    @keyframes breathe { 0%,100%{opacity:0.35} 50%{opacity:1} }
+    @keyframes up { to { opacity: 1; transform: translateY(0); } }
+
+    /* Marquee */
+    .marquee {
+      border-top: 1px solid var(--gray-800);
+      border-bottom: 1px solid var(--gray-800);
+      background: var(--black);
+      overflow: hidden;
+    }
+    .marquee .track {
+      display: flex;
+      width: max-content;
+      animation: scroll 35s linear infinite;
+    }
+    .marquee .inner {
+      display: flex;
+      gap: 1.2rem;
+      padding: 1.2rem 0;
+      align-items: center;
+      white-space: nowrap;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.3rem;
+      text-transform: uppercase;
+      color: var(--gray-600);
+    }
+    .dotSep {
+      color: var(--accent);
+      opacity: 0.9;
+    }
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Light featured section */
+    .light {
+      background: var(--white);
+      color: var(--black);
+      border-top: 1px solid var(--gray-200);
+    }
+    .light .muted { color: #5a5852; }
+    .light .ui { color: var(--black); }
+    .light .divider { border-color: rgba(10,10,10,0.14); }
+
+    .headerRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+      padding-bottom: 2.2rem;
+      border-bottom: 1px solid rgba(10,10,10,0.14);
+      margin-bottom: 5rem;
+    }
+    @media (max-width: 900px) {
+      .headerRow { flex-direction: column; align-items: flex-start; margin-bottom: 3.2rem; }
+    }
+    .hTitle {
+      margin: 0.8rem 0 0 0;
+      font-family: "Playfair Display", serif;
+      font-weight: 400;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1.05;
+      color: inherit;
+    }
+    .hTitle em { font-style: italic; }
+    .metaTag {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.25rem;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.55);
+      text-align: right;
+    }
+    @media (max-width: 900px) { .metaTag { text-align: left; } }
+
+    .grid12 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) { .grid12 { grid-template-columns: 1fr; } }
+
+    .card {
+      position: relative;
+      overflow: hidden;
+      background: #0f0f0f;
+      border-radius: 14px;
+      border: 1px solid rgba(10,10,10,0.12);
+      min-height: 340px;
+      cursor: pointer;
+    }
+    .card.big { grid-column: span 6; grid-row: span 2; min-height: 550px; }
+    .card.small { grid-column: span 3; aspect-ratio: 3/4; min-height: auto; }
+    @media (max-width: 900px) {
+      .card.big, .card.small { grid-column: auto; grid-row: auto; aspect-ratio: 3/4; min-height: auto; }
+    }
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%);
+      transform: scale(1);
+      transition: filter 0.6s ease, transform 0.7s var(--ease);
+    }
+    .card .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(10,10,10,0.82) 0%, rgba(10,10,10,0.0) 55%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .card .badge {
+      position: absolute;
+      top: 1.2rem;
+      left: 1.2rem;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35rem;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .card .info {
+      position: absolute;
+      left: 1.2rem;
+      right: 1.2rem;
+      bottom: 1.2rem;
+      transform: translateY(12px);
+      opacity: 0;
+      transition: transform 0.55s var(--ease), opacity 0.35s ease;
+    }
+    .card .name {
+      font-family: "Playfair Display", serif;
+      font-weight: 400;
+      font-size: 1.45rem;
+      color: var(--white);
+      margin: 0 0 0.35rem 0;
+      line-height: 1.2;
+    }
+    .card .sub {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0;
+    }
+    .card:hover img { filter: grayscale(0%); transform: scale(1.05); }
+    .card:hover .overlay { opacity: 1; }
+    .card:hover .badge { opacity: 1; }
+    .card:hover .info { opacity: 1; transform: translateY(0); }
+
+    /* Editorial list */
+    .editorialHeader .label { display: inline-block; }
+    .editorialHeader h2 {
+      margin: 0.9rem 0 1.2rem 0;
+      font-family: "Playfair Display", serif;
+      font-weight: 400;
+      font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+      line-height: 1.1;
+      color: var(--white);
+    }
+    .accentLine { width: 40px; height: 2px; background: var(--accent); }
+    .editorialGrid {
+      margin-top: 3.2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--gray-800);
+    }
+    @media (max-width: 900px) {
+      .editorialGrid { grid-template-columns: 1fr; }
+    }
+    .item {
+      position: relative;
+      padding: 2.2rem 2rem;
+      border-bottom: 1px solid var(--gray-800);
+      transition: background 0.3s ease;
+      min-height: 210px;
+    }
+    .item:nth-child(even) { border-left: 1px solid var(--gray-800); }
+    @media (max-width: 900px) { .item:nth-child(even) { border-left: 0; } }
+    .item:hover { background: rgba(255,255,255,0.02); }
+    .cat {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3rem;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.9rem;
+    }
+    .item h3 {
+      margin: 0 2.2rem 0.8rem 0;
+      font-family: "Playfair Display", serif;
+      font-weight: 400;
+      font-size: 1.55rem;
+      color: var(--white);
+      line-height: 1.2;
+      transition: color 0.3s ease;
+    }
+    .item p {
+      margin: 0 0 1.2rem 0;
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 400;
+      font-size: 1.05rem;
+      color: var(--gray-400);
+      line-height: 1.7;
+      max-width: 60ch;
+    }
+    .meta {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.22rem;
+      text-transform: uppercase;
+      color: var(--gray-600);
+    }
+    .arrowTop {
+      position: absolute;
+      right: 2rem;
+      top: 2.2rem;
+      color: var(--gray-800);
+      font-family: "Playfair Display", serif;
+      font-size: 1.6rem;
+      line-height: 1;
+      transition: transform 0.55s var(--ease), color 0.3s ease;
+    }
+    .item:hover h3 { color: var(--accent); }
+    .item:hover .arrowTop { color: var(--accent); transform: translateX(4px); }
+
+    /* Quote */
+    .quoteWrap {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      gap: 1.6rem;
+    }
+    .quoteBar { width: 30px; height: 2px; background: var(--accent); }
+    blockquote {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+      color: var(--gray-200);
+      max-width: 750px;
+      line-height: 1.55;
+    }
+    .attrib {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.4rem;
+      text-transform: uppercase;
+      color: var(--gray-600);
+    }
+
+    /* Contact / CTA */
+    .ctaCenter {
+      text-align: center;
+      display: grid;
+      place-items: center;
+      gap: 1.1rem;
+    }
+    .ctaCenter h2 {
+      margin: 0.2rem 0 0 0;
+      font-family: "Playfair Display", serif;
+      font-weight: 400;
+      font-size: 2.1rem;
+      color: var(--white);
+      line-height: 1.15;
+    }
+    .ctaCenter .subtext {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.08rem;
+      color: var(--gray-400);
+      line-height: 1.7;
+      max-width: 62ch;
+    }
+    .formRow {
+      margin-top: 1.6rem;
+      display: flex;
+      gap: 0.9rem;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 440px;
+    }
+    @media (max-width: 520px) { .formRow { flex-direction: column; max-width: 520px; } }
+    .input {
+      flex: 1;
+      height: 46px;
+      padding: 0 1rem;
+      border: 1px solid var(--gray-800);
+      background: transparent;
+      color: var(--white);
+      outline: none;
+      border-radius: 14px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      width: 100%;
+    }
+    .input::placeholder { color: rgba(138,135,128,0.75); }
+    .input:focus { border-color: var(--accent); }
+
+    /* Contact section (light) */
+    .contactGrid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .contactGrid { grid-template-columns: 1fr; } }
+    .panel {
+      border: 1px solid rgba(10,10,10,0.14);
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.55);
+    }
+    .panel .top {
+      padding: 2.2rem 2rem 1.6rem 2rem;
+      border-bottom: 1px solid rgba(10,10,10,0.14);
+      background: rgba(255,255,255,0.7);
+    }
+    .panel .top h3 {
+      margin: 0.8rem 0 0 0;
+      font-family: "Playfair Display", serif;
+      font-weight: 400;
+      font-size: 2.1rem;
+      line-height: 1.1;
+      color: #111111;
+    }
+    .panel .body {
+      padding: 2rem;
+      display: grid;
+      gap: 1.6rem;
+    }
+    .kicker {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35rem;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.55);
+      margin-bottom: 0.5rem;
+    }
+    .ptext {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(10,10,10,0.75);
+    }
+    .wa {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem 1.2rem;
+      border: 1px solid rgba(10,10,10,0.14);
+      border-radius: 14px;
+      background: transparent;
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.6s var(--ease);
+      width: 100%;
+      cursor: pointer;
+    }
+    .wa:hover {
+      border-color: rgba(200,160,74,0.55);
+      background: rgba(200,160,74,0.10);
+      transform: translateY(-2px);
+    }
+    .wa .left {
+      display: grid;
+      gap: 0.25rem;
+      text-align: left;
+    }
+    .wa .t1 {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.22rem;
+      text-transform: uppercase;
+      color: #111111;
+    }
+    .wa .t2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.02rem;
+      color: rgba(10,10,10,0.7);
+    }
+    .wa .chev {
+      font-family: "Playfair Display", serif;
+      font-size: 1.3rem;
+      color: rgba(10,10,10,0.35);
+      transition: transform 0.55s var(--ease), color 0.3s ease;
+    }
+    .wa:hover .chev { transform: translateX(4px); color: var(--accent); }
+
+    .hoursTable {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(10,10,10,0.14);
+      background: rgba(255,255,255,0.7);
+    }
+    .hoursTable td {
+      padding: 1rem 1.1rem;
+      border-bottom: 1px solid rgba(10,10,10,0.10);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.02rem;
+      color: rgba(10,10,10,0.78);
+    }
+    .hoursTable tr:last-child td { border-bottom: 0; }
+    .hoursTable td:first-child {
+      font-family: "Bebas Neue", sans-serif;
+      letter-spacing: 0.22rem;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      color: rgba(10,10,10,0.55);
+      width: 40%;
+    }
+    .closed {
+      font-family: "Bebas Neue", sans-serif;
+      letter-spacing: 0.28rem;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      color: rgba(10,10,10,0.55);
+      text-align: right;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 6rem 4rem 0 4rem;
+      background: var(--black);
+      border-top: 1px solid var(--gray-800);
+    }
+    @media (max-width: 900px) { .footer { padding: 5rem 2rem 0 2rem; } }
+    .footerTop {
+      display: flex;
+      justify-content: space-between;
+      gap: 3rem;
+      flex-wrap: wrap;
+      padding-bottom: 4rem;
+    }
+    .brandCol { min-width: 260px; max-width: 360px; }
+    .footerLogo {
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 1.45rem;
+      letter-spacing: 0.55rem;
+      text-transform: uppercase;
+      color: var(--white);
+      margin: 0 0 1rem 0;
+    }
+    .footerTag {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--gray-600);
+      margin: 0;
+      line-height: 1.7;
+    }
+    .cols {
+      display: flex;
+      gap: 3.5rem;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .col { min-width: 180px; }
+    .col h4 {
+      margin: 0 0 1.1rem 0;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.35rem;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .col a {
+      display: inline-block;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 0.98rem;
+      color: var(--gray-600);
+      margin: 0.35rem 0;
+      transition: color 0.3s ease;
+    }
+    .col a:hover { color: var(--white); }
+    .bottomBar {
+      border-top: 1px solid rgba(255,255,255,0.04);
+      padding: 1.6rem 0 1.8rem 0;
+      font-family: "Bebas Neue", sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.15rem;
+      text-transform: uppercase;
+      color: var(--gray-800);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Small utility */
+    .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+    /* Mobile drawer */
+    .drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .drawer.open { pointer-events: auto; opacity: 1; }
+    .drawer .backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(10,10,10,0.72);
+    }
+    .drawer .panel {
+      position: absolute;
+      top: 0; right: 0;
+      height: 100%;
+      width: min(420px, 92vw);
+      background: var(--black);
+      border-left: 1px solid var(--gray-800);
+      border-radius: 0;
+      transform: translateX(18px);
+      transition: transform 0.55s var(--ease);
+      display: flex;
+      flex-direction: column;
+      padding: 1.6rem 1.6rem 2rem 1.6rem;
+    }
+    .drawer.open .panel { transform: translateX(0); }
+    .drawer .topRow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid var(--gray-800);
+      margin-bottom: 1.4rem;
+    }
+    .drawer .closeBtn {
+      background: transparent;
+      border: 1px solid var(--gray-800);
+      color: var(--white);
+      height: 40px;
+      padding: 0 0.9rem;
+      border-radius: 14px;
+      cursor: pointer;
+      font-family: "Bebas Neue", sans-serif;
+      letter-spacing: 0.22rem;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+    .drawer .closeBtn:hover { border-color: rgba(200,160,74,0.55); color: var(--accent); }
+    .drawer nav {
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+    .drawer nav a {
+      padding: 1rem 0.2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-family: "Bebas Neue", sans-serif;
+      letter-spacing: 0.25rem;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      color: var(--white);
+      transition: color 0.3s ease;
+    }
+    .drawer nav a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="brand">BIGTERA LABS <span class="dot" aria-hidden="true"></span></div>
+  </div>
+
+  <header class="nav" role="banner">
+    <a class="logo" href="#top" aria-label="Bigtera Labs Home">BIGTERA LABS</a>
+    <nav class="navlinks" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#mission">Mission</a>
+      <a href="#contact">Contact</a>
+      <a href="#subscribe">Subscribe</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">☰</button>
+  </header>
+
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="backdrop" id="drawerBackdrop"></div>
+    <div class="panel" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="topRow">
+        <div class="logo" style="font-size:1.25rem; letter-spacing:0.55rem;">BIGTERA LABS</div>
+        <button class="closeBtn" id="drawerClose" aria-label="Close menu">Close</button>
+      </div>
+      <nav>
+        <a href="#about" data-close>About</a>
+        <a href="#mission" data-close>Mission</a>
+        <a href="#contact" data-close>Contact</a>
+        <a href="#subscribe" data-close>Subscribe</a>
+      </nav>
+      <div style="margin-top:auto; border-top:1px solid var(--gray-800); padding-top:1.2rem;">
+        <div class="label" style="color:var(--accent);">Budhi vihar · Moradabad</div>
+        <p style="margin:0.8rem 0 0 0; font-family:'Cormorant Garamond',serif; color:var(--gray-400); line-height:1.7;">
+          A small team with big ambitions—building products that matter, one bold idea at a time.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero" id="home" aria-label="Hero">
+      <div class="hero-content">
+        <div class="hero-issue">EST. 2024 </div>
+        <h1 class="hero-title">BIGTERA LABS<span class="sig">.</span></h1>
+        <p class="hero-tagline">We're a startup building something special — crafting products and experiences that push boundaries and challenge the ordinary.</p>
+        <div class="hero-cta-row">
+          <a class="btn primary" href="#contact">Join the Journey <span class="arrow">→</span></a>
+          <a class="btn" href="#about">Our Story <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <div class="scroll-indicator" aria-hidden="true">
+        <div class="t">SCROLL</div>
+        <div class="line"></div>
+      </div>
+    </section>
+
+    <section class="marquee" aria-label="Ticker">
+      <div class="track" aria-hidden="true">
+        <div class="inner">
+          <span>Product Design</span><span class="dotSep">●</span>
+          <span>Engineering</span><span class="dotSep">●</span>
+          <span>Innovation</span><span class="dotSep">●</span>
+          <span>Prototyping</span><span class="dotSep">●</span>
+          <span>User Experience</span><span class="dotSep">●</span>
+          <span>Growth</span><span class="dotSep">●</span>
+          <span>Open Source</span><span class="dotSep">●</span>
+          <span>Community</span><span class="dotSep">●</span>
+          <span>Craft</span><span class="dotSep">●</span>
+          <span>Ship Fast</span><span class="dotSep">●</span>
+
+          <span>Product Design</span><span class="dotSep">●</span>
+          <span>Engineering</span><span class="dotSep">●</span>
+          <span>Innovation</span><span class="dotSep">●</span>
+          <span>Prototyping</span><span class="dotSep">●</span>
+          <span>User Experience</span><span class="dotSep">●</span>
+          <span>Growth</span><span class="dotSep">●</span>
+          <span>Open Source</span><span class="dotSep">●</span>
+          <span>Community</span><span class="dotSep">●</span>
+          <span>Craft</span><span class="dotSep">●</span>
+          <span>Ship Fast</span><span class="dotSep">●</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section light" id="about" aria-label="About Bigtera Labs">
+      <div class="headerRow reveal">
+        <div>
+          <div class="label">About Bigtera Labs</div>
+          <h2 class="hTitle">A startup with a mission to build <em>something special</em></h2>
+        </div>
+        <div class="metaTag">Moradabad, UP · Founded 2024</div>
+      </div>
+
+      <div class="grid12">
+        <a class="card big reveal" href="#mission" aria-label="Our Mission">
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1600&q=80" alt="Developer working on code" />
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="badge" aria-hidden="true">01</div>
+          <div class="info">
+            <div class="name">Our Vision</div>
+            <p class="sub">Dream · Build · Launch</p>
+          </div>
+        </a>
+
+        <a class="card small reveal" href="#contact" aria-label="Product Lab">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80" alt="Team collaborating in a meeting" />
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="badge" aria-hidden="true">02</div>
+          <div class="info">
+            <div class="name">Product Lab</div>
+            <p class="sub">Where ideas take shape</p>
+          </div>
+        </a>
+
+        <a class="card small reveal" href="#contact" aria-label="The Team">
+          <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80" alt="Team working together" />
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="badge" aria-hidden="true">03</div>
+          <div class="info">
+            <div class="name">The Team</div>
+            <p class="sub">Small but mighty</p>
+          </div>
+        </a>
+
+        <a class="card small reveal" href="#subscribe" aria-label="Behind the Scenes">
+          <img src="https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?w=1200&q=80" alt="Laptop with work in progress" />
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="badge" aria-hidden="true">04</div>
+          <div class="info">
+            <div class="name">Behind the Scenes</div>
+            <p class="sub">Our build journal</p>
+          </div>
+        </a>
+
+        <a class="card small reveal" href="#contact" aria-label="What's Next">
+          <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=80" alt="Futuristic abstract visual" />
+          <div class="overlay" aria-hidden="true"></div>
+          <div class="badge" aria-hidden="true">05</div>
+          <div class="info">
+            <div class="name">What's Next</div>
+            <p class="sub">The roadmap ahead</p>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="section alt" id="mission" aria-label="Mission">
+      <div class="editorialHeader reveal">
+        <div class="label">Our Mission</div>
+        <h2>We're a young startup obsessed with building products people actually love — no shortcuts, no compromises.</h2>
+        <div class="accentLine" aria-hidden="true"></div>
+      </div>
+
+      <div class="editorialGrid" role="list">
+        <a class="item reveal" href="#mission" role="listitem" aria-label="Mission Statement">
+          <div class="cat">Vision</div>
+          <h3>Build things that matter, from scratch</h3>
+          <p>We start with real problems and work backwards — prototyping fast, iterating relentlessly, and shipping products that make a genuine difference.</p>
+          <div class="meta">BIGTERA LABS · 3 MIN</div>
+          <div class="arrowTop" aria-hidden="true">→</div>
+        </a>
+
+        <a class="item reveal" href="#mission" role="listitem" aria-label="Technology Approach">
+          <div class="cat">Approach</div>
+          <h3>Move fast, but build to last</h3>
+          <p>We pick the right tools for the job, obsess over craft, and believe speed and quality aren't trade-offs — they're both non-negotiable.</p>
+          <div class="meta">BIGTERA LABS · 4 MIN</div>
+          <div class="arrowTop" aria-hidden="true">→</div>
+        </a>
+
+        <a class="item reveal" href="#mission" role="listitem" aria-label="Delivery">
+          <div class="cat">Culture</div>
+          <h3>Small team, outsized ambition</h3>
+          <p>We're a tight-knit crew that thrives on ownership — everyone ships, everyone has a voice, and every idea gets a fair shot at becoming real.</p>
+          <div class="meta">BIGTERA LABS · 5 MIN</div>
+          <div class="arrowTop" aria-hidden="true">→</div>
+        </a>
+
+        <a class="item reveal" href="#mission" role="listitem" aria-label="Partnership">
+          <div class="cat">Future</div>
+          <h3>This is just the beginning</h3>
+          <p>We're heads down, building in public, and betting on ourselves. The best part? We're only getting started — and the roadmap is wide open.</p>
+          <div class="meta">BIGTERA LABS · 3 MIN</div>
+          <div class="arrowTop" aria-hidden="true">→</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section tight" aria-label="Pull quote">
+      <div class="quoteWrap reveal">
+        <div class="quoteBar" aria-hidden="true"></div>
+        <blockquote>“The best startups don't wait for permission — they build something the world didn't know it needed.”</blockquote>
+        <div class="attrib">— BIGTERA LABS</div>
+      </div>
+    </section>
+
+    <section class="section light" id="contact" aria-label="Contact Us">
+      <div class="headerRow reveal" style="border-bottom:1px solid rgba(10,10,10,0.14);">
+        <div>
+          <div class="label">Contact Us</div>
+          <h2 class="hTitle">Let's build <em>together</em></h2>
+        </div>
+        <div class="metaTag">Say hello · We'd love to hear from you</div>
+      </div>
+
+      <div class="contactGrid">
+        <div class="panel reveal">
+          <div class="top">
+            <div class="kicker">A note from the team</div>
+            <h3>We’d love to connect.</h3>
+          </div>
+          <div class="body">
+            <p class="ptext">Whether you have an idea to share, want to collaborate, or just want to say hi — reach out. We’re always open to conversations that lead somewhere interesting.</p>
+
+            <a class="wa" href="https://wa.me/918178974750" target="_blank" rel="noopener" aria-label="Message us on WhatsApp">
+              <div class="left">
+                <div class="t1">Message us on WhatsApp</div>
+                <div class="t2">Fast replies · Real conversations · Real humans</div>
+              </div>
+              <div class="chev" aria-hidden="true">→</div>
+            </a>
+
+            <div style="display:grid; gap:0.6rem;">
+              <div class="kicker">Bigtera Labs</div>
+              <p class="ptext" style="margin-top:0;">Budhi vihar, Moradabad, UP 244001</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal" style="display:grid; gap:1.5rem;">
+          <div class="panel" style="border-radius:14px;">
+            <div class="top" style="padding:1.8rem 1.6rem;">
+              <div class="kicker">Hours</div>
+              <div style="font-family:'Playfair Display',serif; font-weight:400; font-size:1.6rem; line-height:1.2; color:#111111; margin-top:0.6rem;">Today</div>
+            </div>
+            <div class="body" style="padding:1.6rem;">
+              <table class="hoursTable" aria-label="Business hours">
+                <tr>
+                  <td>Today</td>
+                  <td class="closed">Closed</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel" style="border-radius:14px;">
+            <div class="top" style="padding:1.8rem 1.6rem;">
+              <div class="kicker">Get Involved</div>
+              <div style="font-family:’Playfair Display’,serif; font-weight:400; font-size:1.6rem; line-height:1.2; color:#111111; margin-top:0.6rem;">Tell us your idea</div>
+            </div>
+            <div class="body" style="padding:1.6rem;">
+              <p class="ptext" style="margin:0 0 1rem 0;">Have a project in mind? Want to join the team? Or just curious about what we’re building? Drop us a message.</p>
+              <a class="btn primary" href="https://wa.me/918178974750" target="_blank" rel="noopener" style="width:100%; border-radius:14px; height:48px;">
+                WhatsApp Now <span class="arrow">→</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="subscribe" aria-label="Subscribe">
+      <div class="ctaCenter reveal">
+        <div class="label" style="text-align:center;">Subscribe</div>
+        <h2>Follow our journey — get updates on what we're building, launching, and learning along the way.</h2>
+        <p class="subtext">No spam, just honest updates from the trenches of building a startup.</p>
+
+        <form class="formRow" id="newsletterForm" autocomplete="on">
+          <label class="sr" for="email">Email</label>
+          <input class="input" id="email" name="email" type="email" placeholder="Email" required />
+          <button class="btn primary" type="submit" style="border-radius:14px; min-width: 150px;">
+            Accept <span class="arrow">→</span>
+          </button>
+        </form>
+
+        <div id="formMsg" class="ui" style="margin-top:0.9rem; color:var(--gray-600); letter-spacing:0.18rem; font-size:0.7rem;"></div>
+      </div>
+    </section>
+
+    <footer class="footer" aria-label="Footer">
+      <div class="footerTop">
+        <div class="brandCol reveal">
+          <div class="footerLogo">BIGTERA LABS</div>
+          <p class="footerTag">A startup building something special — one product, one idea, one day at a time.</p>
+        </div>
+
+        <div class="cols">
+          <div class="col reveal">
+            <h4>Company</h4>
+            <a href="#about">About</a><br/>
+            <a href="#mission">Mission</a><br/>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="col reveal">
+            <h4>Explore</h4>
+            <a href="#mission">Our Vision</a><br/>
+            <a href="#mission">What We're Building</a><br/>
+            <a href="#mission">The Roadmap</a>
+          </div>
+          <div class="col reveal">
+            <h4>Connect</h4>
+            <a href="https://wa.me/918178974750" target="_blank" rel="noopener">WhatsApp</a><br/>
+            <a href="#subscribe">Newsletter</a><br/>
+            <a href="#top">Back to top</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottomBar">
+        <div>Copyright © 2024 Bigtera Labs — All Rights Reserved.</div>
+        <div>Budhi vihar · Moradabad, UP 244001</div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const preloader = document.getElementById('preloader');
+      window.addEventListener('load', () => {
+        setTimeout(() => preloader.classList.add('hidden'), 1000);
+      });
+
+      // IntersectionObserver reveal with sibling stagger
+      const revealEls = Array.from(document.querySelectorAll('.reveal'));
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const parent = el.parentElement;
+          if (parent) {
+            const siblings = Array.from(parent.querySelectorAll('.reveal'));
+            const idx = Math.max(0, siblings.indexOf(el));
+            el.style.transitionDelay = (idx * 80) + 'ms';
+          }
+          el.classList.add('visible');
+          io.unobserve(el);
+        });
+      }, { threshold: 0.12 });
+      revealEls.forEach(el => io.observe(el));
+
+      // Mobile drawer
+      const drawer = document.getElementById('drawer');
+      const hamburger = document.getElementById('hamburger');
+      const backdrop = document.getElementById('drawerBackdrop');
+      const closeBtn = document.getElementById('drawerClose');
+
+      function setDrawer(open) {
+        drawer.classList.toggle('open', open);
+        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      hamburger.addEventListener('click', () => setDrawer(true));
+      backdrop.addEventListener('click', () => setDrawer(false));
+      closeBtn.addEventListener('click', () => setDrawer(false));
+      drawer.addEventListener('click', (e) => {
+        const a = e.target.closest('[data-close]');
+        if (a) setDrawer(false);
+      });
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') setDrawer(false);
+      });
+
+      // Newsletter form (no backend)
+      const form = document.getElementById('newsletterForm');
+      const msg = document.getElementById('formMsg');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = (new FormData(form)).get('email');
+        msg.textContent = 'Subscribed: ' + email;
+        form.reset();
+        setTimeout(() => { msg.textContent = ''; }, 3500);
+      });
+
+      // Hero canvas cutout reveal
+      const hero = document.querySelector('.hero');
+      const canvas = document.getElementById('revealCanvas');
+      const hint = document.getElementById('hint');
+      const ctx = canvas.getContext('2d');
+
+      const state = {
+        x: -9999,
+        y: -9999,
+        r: 140,
+        hovering: false,
+        dpr: Math.max(1, Math.min(2, window.devicePixelRatio || 1))
+      };
+
+      function sizeCanvas() {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = Math.floor(rect.width * state.dpr);
+        canvas.height = Math.floor(rect.height * state.dpr);
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+        draw();
+      }
+
+      function draw() {
+        const rect = canvas.getBoundingClientRect();
+        const w = rect.width, h = rect.height;
+        ctx.clearRect(0, 0, w, h);
+
+        // Dark overlay
+        ctx.fillStyle = 'rgba(10,10,10,0.92)';
+        ctx.fillRect(0, 0, w, h);
+
+        // Cutout (feathered)
+        const x = state.x, y = state.y;
+        if (x > -1000 && y > -1000) {
+          ctx.save();
+          ctx.globalCompositeOperation = 'destination-out';
+          const g = ctx.createRadialGradient(x, y, state.r * 0.35, x, y, state.r);
+          g.addColorStop(0, 'rgba(0,0,0,1)');
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(x, y, state.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          // Accent ring
+          ctx.save();
+          ctx.strokeStyle = 'rgba(200,160,74,0.25)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(x, y, state.r + 2, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      function setPosFromEvent(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        state.x = clientX - rect.left;
+        state.y = clientY - rect.top;
+        draw();
+      }
+
+      canvas.addEventListener('mouseenter', () => {
+        state.hovering = true;
+        hero.classList.add('hovering');
+        if (hint) hint.style.opacity = '0';
+      });
+      canvas.addEventListener('mouseleave', () => {
+        state.hovering = false;
+        hero.classList.remove('hovering');
+        if (hint) hint.style.opacity = '';
+        state.x = -9999; state.y = -9999;
+        draw();
+      });
+      canvas.addEventListener('mousemove', setPosFromEvent, { passive: true });
+
+      // Touch support: tap/drag reveal
+      canvas.addEventListener('touchstart', (e) => {
+        state.hovering = true;
+        hero.classList.add('hovering');
+        if (hint) hint.style.opacity = '0';
+        setPosFromEvent(e);
+      }, { passive: true });
+      canvas.addEventListener('touchmove', setPosFromEvent, { passive: true });
+      canvas.addEventListener('touchend', () => {
+        state.hovering = false;
+        hero.classList.remove('hovering');
+        state.x = -9999; state.y = -9999;
+        draw();
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        state.dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+        sizeCanvas();
+      });
+
+      sizeCanvas();
+    })();
+  </script>
+</body>
+</html>
